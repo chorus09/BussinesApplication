@@ -1,0 +1,159 @@
+﻿<Window x:Class="BussinesApplication.Views.ProductsManageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BussinesApplication.Views"
+        mc:Ignorable="d"
+        Title="Products Manage"
+        Height="650"
+        Width="800"
+        FontFamily="Helvetica">
+    <Window.Resources>
+        <Style TargetType="Button"
+               x:Key="CRUDButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.5"
+                                                             Duration="0:0:0.3" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.3" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin"
+                    Value="15,5,15,15" />
+            <Setter Property="BorderThickness"
+                    Value="0.8" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="Height"
+                    Value="23" />
+        </Style>
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="GridLinesVisibility"
+                    Value="All" />
+            <Setter Property="HorizontalGridLinesBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="Gray"
+                                     Opacity="0.2" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="VerticalGridLinesBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="Gray"
+                                     Opacity="0.2" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#D8DFE9">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="7*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1"
+              Margin="0,10,5,5"
+              Grid.RowSpan="2">
+            <DataGrid ItemsSource="{Binding Products}"
+                      SelectedItem="{Binding SelectedProduct}"
+                      x:Name="ProductsDataGrid"
+                      AutoGenerateColumns="False">
+                <DataGrid.LayoutTransform>
+                    <ScaleTransform ScaleX="1"
+                                    ScaleY="1" />
+                </DataGrid.LayoutTransform>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID"
+                                        Width="50"
+                                        Binding="{Binding Id}"
+                                        IsReadOnly="True" />
+                    <DataGridTextColumn Header="Email"
+                                        Width="150"
+                                        Binding="{Binding Email}"
+                                        IsReadOnly="True" />
+                    <DataGridTextColumn Header="Name"
+                                        Width="150"
+                                        Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Code"
+                                        Width="150"
+                                        Binding="{Binding Code}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Column="0"
+              Grid.Row="1"
+              Margin="0,10,0,0">
+            <StackPanel>
+                <Button Style="{StaticResource CRUDButton}"
+                        Click="ProductConstructorWindow_OnClick"
+                        Content="Create" />
+                <Button Style="{StaticResource CRUDButton}"
+                        Command="{Binding ReadProductsCommand}"
+                        Content="Read" />
+                <Button Style="{StaticResource CRUDButton}"
+                        Command="{Binding DeleteProductCommand}"
+                        Content="Delete" />
+                <CheckBox Content="Auto-read db"
+                          Margin="5"
+                          IsChecked="{Binding IsUpdaterThreadRunning, Mode=TwoWay}" />
+                <TextBlock Text="Get products by email"
+                           Margin="5" />
+                <TextBox Margin="5"
+                         Text="{Binding Email, Mode=TwoWay}" />
+                <TextBlock Text="Selected email"
+                           Margin="5" />
+                <TextBox Margin="5"
+                         Text="{Binding SelectedProductEmail, Mode=TwoWay}" />
+
+            </StackPanel>
+            <Grid Margin="0,0,0,40"
+                  VerticalAlignment="Bottom">
+                <Button Style="{StaticResource CRUDButton}"
+                        Content="Clients"
+                        Background="AliceBlue"
+                        Click="ClientsManageWindow_OnClick"/>
+            </Grid>
+            <Grid Grid.Row="1"
+                  Grid.Column="0"
+                  VerticalAlignment="Bottom"
+                  Margin="10">
+                <TextBlock Text="Products count: " />
+                <TextBlock Text="{Binding ProductsCount, Mode=TwoWay}"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Right"
+                           Margin="0,0,20,0" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
